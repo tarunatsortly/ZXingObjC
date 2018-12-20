@@ -21,4 +21,6 @@
  */
 @interface ZXCode93Writer : ZXOneDimensionalCodeWriter
 
+- (NSString *)convertToExtended:(NSString *)contents;
+    
 @end

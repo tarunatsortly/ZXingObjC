@@ -21,4 +21,6 @@
  */
 @interface ZXCode39Writer : ZXOneDimensionalCodeWriter
 
+- (NSString *)tryToConvertToExtendedMode:(NSString *)contents;
+    
 @end
