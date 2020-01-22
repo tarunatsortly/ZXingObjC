@@ -43,10 +43,12 @@ typedef enum {
 
 - (ZXBoolArray *)encode:(NSString *)contents {
   int length = (int)[contents length];
+  /*
   // Check length
   if (length < 1 || length > 80) {
     [NSException raise:NSInvalidArgumentException format:@"Contents length should be between 1 and 80 characters, but got %d", length];
   }
+  */
   // Check content
   for (int i = 0; i < length; i++) {
     unichar c = [contents characterAtIndex:i];
