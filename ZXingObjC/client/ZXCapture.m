@@ -28,7 +28,6 @@
 
 @property (nonatomic, strong) CALayer *binaryLayer;
 @property (nonatomic, assign) BOOL cameraIsReady;
-@property (nonatomic, assign) int captureDeviceIndex;
 @property (nonatomic, strong) dispatch_queue_t captureQueue;
 @property (nonatomic, assign) BOOL hardStop;
 @property (nonatomic, strong) AVCaptureDeviceInput *input;
@@ -49,7 +48,6 @@
 
 - (ZXCapture *)init {
   if (self = [super init]) {
-    _captureDeviceIndex = -1;
     _captureQueue = dispatch_queue_create("com.zxing.captureQueue", NULL);
     _focusMode = AVCaptureFocusModeContinuousAutoFocus;
     _hardStop = NO;
@@ -126,7 +124,6 @@
 - (void)setCamera:(int)camera {
   if (_camera != camera) {
     _camera = camera;
-    self.captureDeviceIndex = -1;
     self.captureDevice = nil;
     [self replaceInput];
   }
@@ -211,13 +208,15 @@
 }
 
 - (BOOL)hasFront {
-  NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-  return [devices count] > 1;
+  return [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera
+                                            mediaType:AVMediaTypeVideo
+                                             position:AVCaptureDevicePositionFront] != nil;
 }
 
 - (BOOL)hasBack {
-  NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-  return [devices count] > 0;
+    return [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera
+                                              mediaType:AVMediaTypeVideo
+                                               position:AVCaptureDevicePositionBack] != nil;
 }
 
 - (BOOL)hasTorch {
@@ -545,35 +544,14 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     return self.captureDevice;
   }
   
-  AVCaptureDevice *zxd = nil;
-  
-  NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-  
-  if ([devices count] > 0) {
-    if (self.captureDeviceIndex == -1) {
-      AVCaptureDevicePosition position = AVCaptureDevicePositionBack;
-      if (self.camera == self.front) {
-        position = AVCaptureDevicePositionFront;
-      }
-      
-      for (unsigned int i = 0; i < [devices count]; ++i) {
-        AVCaptureDevice *dev = [devices objectAtIndex:i];
-        if (dev.position == position) {
-          self.captureDeviceIndex = i;
-          zxd = dev;
-          break;
-        }
-      }
+    AVCaptureDevicePosition position = AVCaptureDevicePositionBack;
+    if (self.camera == self.front) {
+      position = AVCaptureDevicePositionFront;
     }
-    
-    if (!zxd && self.captureDeviceIndex != -1) {
-      zxd = [devices objectAtIndex:self.captureDeviceIndex];
-    }
-  }
-  
-  if (!zxd) {
-    zxd = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-  }
+    AVCaptureDevice *zxd =
+    [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera
+                                       mediaType:AVMediaTypeVideo
+                                        position:position];
   
   self.captureDevice = zxd;
   
