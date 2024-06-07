@@ -1,1 +1,1 @@
-../../qrcode/decoder/ZXQRCodeErrorCorrectionLevel.h
+../../qrcode/ZXQRCodeErrorCorrectionLevel.h

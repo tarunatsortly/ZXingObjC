@@ -32,11 +32,6 @@ extern const int ZX_CODE128_CODE_FNC_3;
 extern const int ZX_CODE128_CODE_FNC_4_A;
 extern const int ZX_CODE128_CODE_FNC_4_B;
 
-@class ZXDecodeHints, ZXResult;
-
-/**
- * Decodes Code 128 barcodes.
- */
 @interface ZXCode128Reader : ZXOneDReader
 
 @end

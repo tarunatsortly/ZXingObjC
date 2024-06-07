@@ -1,1 +1,1 @@
-../../common/ZXBitMatrix.h
+../../core/ZXBitMatrix.h

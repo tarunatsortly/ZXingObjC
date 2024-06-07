@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-#import "ZXReader.h"
-
-@class ZXBitArray, ZXDecodeHints, ZXIntArray, ZXResult;
+#import <Foundation/Foundation.h>
 
 /**
  * Encapsulates functionality and implementation that is common to all families
  * of one-dimensional barcodes.
  */
-@interface ZXOneDReader : NSObject <ZXReader>
-
-+ (BOOL)recordPattern:(ZXBitArray *)row start:(int)start counters:(ZXIntArray *)counters;
-+ (BOOL)recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(ZXIntArray *)counters;
-+ (float)patternMatchVariance:(ZXIntArray *)counters pattern:(const int[])pattern maxIndividualVariance:(float)maxIndividualVariance;
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error;
+@interface ZXOneDReader : NSObject
 
 @end

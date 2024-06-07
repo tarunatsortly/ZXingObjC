@@ -17,12 +17,7 @@
 #import "ZXBitMatrix.h"
 #import "ZXErrors.h"
 #import "ZXMultiFormatWriter.h"
-
-#if defined(ZXINGOBJC_AZTEC) || !defined(ZXINGOBJC_USE_SUBSPECS)
 #import "ZXAztecWriter.h"
-#endif
-#if defined(ZXINGOBJC_ONED) || !defined(ZXINGOBJC_USE_SUBSPECS)
-#import "ZXCodaBarWriter.h"
 #import "ZXCode39Writer.h"
 #import "ZXCode93Writer.h"
 #import "ZXCode128Writer.h"
@@ -31,16 +26,9 @@
 #import "ZXITFWriter.h"
 #import "ZXUPCAWriter.h"
 #import "ZXUPCEWriter.h"
-#endif
-#if defined(ZXINGOBJC_DATAMATRIX) || !defined(ZXINGOBJC_USE_SUBSPECS)
 #import "ZXDataMatrixWriter.h"
-#endif
-#if defined(ZXINGOBJC_PDF417) || !defined(ZXINGOBJC_USE_SUBSPECS)
 #import "ZXPDF417Writer.h"
-#endif
-#if defined(ZXINGOBJC_QRCODE) || !defined(ZXINGOBJC_USE_SUBSPECS)
 #import "ZXQRCodeWriter.h"
-#endif
 
 @implementation ZXMultiFormatWriter
 
@@ -55,7 +43,6 @@
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   id<ZXWriter> writer;
   switch (format) {
-#if defined(ZXINGOBJC_ONED) || !defined(ZXINGOBJC_USE_SUBSPECS)
     case kBarcodeFormatEan8:
       writer = [[ZXEAN8Writer alloc] init];
       break;
@@ -88,34 +75,21 @@
       writer = [[ZXITFWriter alloc] init];
       break;
 
-    case kBarcodeFormatCodabar:
-        writer = [[ZXCodaBarWriter alloc] init];
-        break;
-#endif
-
-#if defined(ZXINGOBJC_QRCODE) || !defined(ZXINGOBJC_USE_SUBSPECS)
     case kBarcodeFormatQRCode:
         writer = [[ZXQRCodeWriter alloc] init];
         break;
-#endif
 
-#if defined(ZXINGOBJC_PDF417) || !defined(ZXINGOBJC_USE_SUBSPECS)
     case kBarcodeFormatPDF417:
       writer = [[ZXPDF417Writer alloc] init];
       break;
-#endif
 
-#if defined(ZXINGOBJC_DATAMATRIX) || !defined(ZXINGOBJC_USE_SUBSPECS)
     case kBarcodeFormatDataMatrix:
       writer = [[ZXDataMatrixWriter alloc] init];
       break;
-#endif
 
-#if defined(ZXINGOBJC_AZTEC) || !defined(ZXINGOBJC_USE_SUBSPECS)
     case kBarcodeFormatAztec:
       writer = [[ZXAztecWriter alloc] init];
       break;
-#endif
 
     default:
       if (error) *error = [NSError errorWithDomain:ZXErrorDomain code:ZXWriterError userInfo:@{NSLocalizedDescriptionKey: @"No encoder available for format"}];

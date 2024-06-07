@@ -21,38 +21,10 @@ extern NSString *ZX_CODE39_ALPHABET_STRING;
 extern const int ZX_CODE39_CHARACTER_ENCODINGS[];
 extern const int ZX_CODE39_ASTERISK_ENCODING;
 
-@class ZXDecodeHints, ZXResult;
-
 /**
- * Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.
+ * Reads Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.
  */
 @interface ZXCode39Reader : ZXOneDReader
 
-/**
- * Creates a reader that assumes all encoded data is data, and does not treat the final
- * character as a check digit. It will not decoded "extended Code 39" sequences.
- */
-- (id)init;
-
-/**
- * Creates a reader that can be configured to check the last character as a check digit.
- * It will not decoded "extended Code 39" sequences.
- *
- * @param usingCheckDigit if true, treat the last data character as a check digit, not
- * data, and verify that the checksum passes.
- */
-- (id)initUsingCheckDigit:(BOOL)usingCheckDigit;
-
-/**
- * Creates a reader that can be configured to check the last character as a check digit,
- * or optionally attempt to decode "extended Code 39" sequences that are used to encode
- * the full ASCII character set.
- *
- * @param usingCheckDigit if true, treat the last data character as a check digit, not
- * data, and verify that the checksum passes.
- * @param extendedMode if true, will attempt to decode extended Code 39 sequences in the
- * text.
- */
-- (id)initUsingCheckDigit:(BOOL)usingCheckDigit extendedMode:(BOOL)extendedMode;
 
 @end

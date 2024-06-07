@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXBitArray.h"
-#import "ZXErrors.h"
-#import "ZXIntArray.h"
 #import "ZXUPCEReader.h"
 
 /**
@@ -60,80 +57,10 @@ const int ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[][10] = {
   {0x07, 0x0B, 0x0D, 0x0E, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A}
 };
 
-@interface ZXUPCEReader ()
-
-@property (nonatomic, strong, readonly) ZXIntArray *decodeMiddleCounters;
-
-@end
-
 @implementation ZXUPCEReader
-
-- (id)init {
-  if (self = [super init]) {
-    _decodeMiddleCounters = [[ZXIntArray alloc] initWithLength:4];
-  }
-
-  return self;
-}
-
-- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error {
-  ZXIntArray *counters = self.decodeMiddleCounters;
-  [counters clear];
-
-  int end = [row size];
-  int rowOffset = (int)NSMaxRange(startRange);
-  int lgPatternFound = 0;
-
-  for (int x = 0; x < 6 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:ZX_UPC_EAN_PATTERNS_L_AND_G_PATTERNS error:error];
-    if (bestMatch == -1) {
-      return -1;
-    }
-    [result appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
-
-    rowOffset += [counters sum];
-
-    if (bestMatch >= 10) {
-      lgPatternFound |= 1 << (5 - x);
-    }
-  }
-
-  if (![self determineNumSysAndCheckDigit:result lgPatternFound:lgPatternFound]) {
-    if (error) *error = ZXNotFoundErrorInstance();
-    return -1;
-  }
-  return rowOffset;
-}
-
-- (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error {
-  return [ZXUPCEANReader findGuardPattern:row
-                                rowOffset:endStart
-                               whiteFirst:YES
-                                  pattern:ZX_UPCE_MIDDLE_END_PATTERN
-                               patternLen:sizeof(ZX_UPCE_MIDDLE_END_PATTERN) / sizeof(int)
-                                    error:error];
-}
 
 + (BOOL)checkStandardUPCEANChecksum:(NSString *)s {
     return [super checkStandardUPCEANChecksum:[ZXUPCEReader convertUPCEtoUPCA:s]];
-}
-
-- (BOOL)determineNumSysAndCheckDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound {
-  for (int numSys = 0; numSys <= 1; numSys++) {
-    for (int d = 0; d < 10; d++) {
-      if (lgPatternFound == ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
-        [resultString insertString:[NSString stringWithFormat:@"%C", (unichar)('0' + numSys)] atIndex:0];
-        [resultString appendFormat:@"%C", (unichar)('0' + d)];
-        return YES;
-      }
-    }
-  }
-
-  return NO;
-}
-
-- (ZXBarcodeFormat)barcodeFormat {
-  return kBarcodeFormatUPCE;
 }
 
 /**

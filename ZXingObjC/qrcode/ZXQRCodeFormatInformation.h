@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-#import "ZXOneDReader.h"
+@class ZXQRCodeErrorCorrectionLevel;
 
-extern const unichar ZX_CODE93_ALPHABET[];
-extern const NSString *ZX_CODE93_ALPHABET_STRING;
-extern const int ZX_CODE93_CHARACTER_ENCODINGS[];
-extern const int ZX_CODE93_ASTERISK_ENCODING;
+/**
+ * Encapsulates a QR Code's format information, including the data mask used and
+ * error correction level.
+ */
+@interface ZXQRCodeFormatInformation : NSObject
 
-@interface ZXCode93Reader : ZXOneDReader
+@property (nonatomic, strong, readonly) ZXQRCodeErrorCorrectionLevel *errorCorrectionLevel;
+@property (nonatomic, assign, readonly) int8_t dataMask;
+
++ (int)numBitsDiffering:(int)a b:(int)b;
 
 @end

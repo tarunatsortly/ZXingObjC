@@ -1,1 +1,1 @@
-../../common/ZXByteArray.h
+../../core/ZXByteArray.h

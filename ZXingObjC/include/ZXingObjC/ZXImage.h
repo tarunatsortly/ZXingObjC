@@ -1,1 +1,1 @@
-../../client/ZXImage.h
+../../core/ZXImage.h

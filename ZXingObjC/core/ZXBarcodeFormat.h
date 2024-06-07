@@ -21,9 +21,6 @@ typedef enum {
   /** Aztec 2D barcode format. */
   kBarcodeFormatAztec,
 
-  /** CODABAR 1D format. */
-  kBarcodeFormatCodabar,
-
   /** Code 39 1D format. */
   kBarcodeFormatCode39,
 
@@ -44,9 +41,6 @@ typedef enum {
 
   /** ITF (Interleaved Two of Five) 1D format. */
   kBarcodeFormatITF,
-
-  /** MaxiCode 2D barcode format. */
-  kBarcodeFormatMaxiCode,
 
   /** PDF417 format. */
   kBarcodeFormatPDF417,

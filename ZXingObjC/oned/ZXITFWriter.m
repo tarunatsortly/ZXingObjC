@@ -15,7 +15,6 @@
  */
 
 #import "ZXBoolArray.h"
-#import "ZXITFReader.h"
 #import "ZXITFWriter.h"
 
 const int ZX_ITF_WRITER_START_PATTERN[] = {1, 1, 1, 1};

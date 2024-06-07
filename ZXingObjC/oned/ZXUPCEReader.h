@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXBarcodeFormat.h"
 #import "ZXUPCEANReader.h"
 
 extern const int ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[][10];
